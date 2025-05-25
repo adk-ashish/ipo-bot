@@ -97,15 +97,21 @@ class MeroShareBot:
             self.driver.find_element(By.XPATH, f"//*[@id='selectBank']/option[{selected}]").click()
         else:
             self.driver.find_element(By.XPATH, "//*[@id='selectBank']/option[2]").click()
-
+        sleep(1)
+        self.wait.until(EC.presence_of_element_located((By.NAME, "accountNumber")))
+        account_dropdown = Select(self.driver.find_element(By.NAME, "accountNumber"))
+        if len(account_dropdown.options) > 1:
+            account_dropdown.select_by_index(1)  # Selects second option (index 1)
+        else:
+         raise Exception("Account number dropdown has no selectable options.")
         self.driver.find_element(By.NAME, "appliedKitta").send_keys(kitta)
         self.driver.find_element(By.NAME, "crnNumber").send_keys(crn)
         self.driver.find_element(By.NAME, "disclaimer").click()
 
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Proceed')]"))).click()
         self.wait.until(EC.presence_of_element_located((By.NAME, "transactionPIN"))).send_keys(txn_pin)
-
-        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Submit')]"))).click()
+        sleep(1)
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Apply')]"))).click()
 
         msg = self.driver.find_element(By.CLASS_NAME, "toast-message").text
         cprint(msg, "green" if "successfully" in msg.lower() else "red")
