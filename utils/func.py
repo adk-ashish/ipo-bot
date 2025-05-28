@@ -28,9 +28,8 @@ class MeroShareBot:
             options.add_argument('--disable-gpu')
             options.add_argument('--disable-software-rasterizer')
 
-        self.driver = uc.Chrome(options=options)
+        self.driver = uc.Chrome(version_main=136, options=options)  #add your version My chrome version is 136
         self.wait = WebDriverWait(self.driver, 30)
-
     def login(self, dp, username, password):
         self.driver.get("https://meroshare.cdsc.com.np/#/login")
         self.wait.until(EC.presence_of_element_located((By.TAG_NAME, "app-login")))
